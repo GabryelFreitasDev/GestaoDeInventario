@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../database.db"
+}
+
+model Usuario {
+  id Int @id @default(autoincrement())
+  nome String
+  email String
+  senha String
+
+  @@map("usuario")
+}
+
+model Cliente {
+  id Int @id @default(autoincrement())
+  nome String
+  cpf_cnpj String
+  contato String
+  endereco String
+
+  pedidos Pedido[]
+
+  @@map("cliente")
+}
+
+model Fornecedor {
+  id Int @id @default(autoincrement())
+  nome String
+  cnpj String
+  contato String
+  endereco String
+
+  produtos Produto[]
+
+  @@map("endereco")
+}
+
+model Produto {
+  id Int @id @default(autoincrement())
+  nome String
+  descricao String
+  preco Decimal
+  quantidade Decimal
+  imagem Bytes
+  fornecedorId Int
+
+  fornecedor Fornecedor @relation(fields: [fornecedorId], references: [id])
+  itenspedido ItemPedido[]
+  transacoes Transacao[]
+
+  @@map("produto")
+}
+
+model Pedido{
+  id Int @id @default(autoincrement())
+  data DateTime
+  clienteId Int
+  status String
+  total Decimal
+
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  itenspedido ItemPedido[]
+  transacoes Transacao[]
+
+  @@map("pedido")
+}
+
+model ItemPedido {
+  id Int @id @default(autoincrement())
+  pedidoId Int
+  produtoId Int
+  quantidade Decimal
+  precoUnitario Decimal
+
+  pedido Pedido @relation(fields: [pedidoId], references: [id])
+  produto Produto @relation(fields: [produtoId], references: [id])
+
+  @@map("itempedido")
+}
+
+model Transacao {
+  id Int @id @default(autoincrement())
+  data DateTime
+  tipo String
+  valor Decimal
+  produtoId Int
+  pedidoId Int
+
+  produto Produto @relation(fields: [produtoId], references: [id])
+  pedido Pedido @relation(fields: [pedidoId], references: [id])
+
+  @@map("transacao")
+}
