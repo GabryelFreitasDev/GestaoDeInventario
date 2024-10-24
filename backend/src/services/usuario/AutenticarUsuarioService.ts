@@ -4,7 +4,7 @@ import AuthRequest from "../../interfaces/AuthRequest";
 import { sign } from "jsonwebtoken";
 import 'dotenv/config';
 
-class AuthUsuarioService {
+class AutenticarUsuarioService {
     async execute(authRequest: AuthRequest) {
 
         const usuario = await validaLogin(authRequest);
@@ -48,4 +48,4 @@ async function validaLogin(authRequest: AuthRequest) {
     return usuario;
 }
 
-export { AuthUsuarioService };
+export { AutenticarUsuarioService };

@@ -1,7 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { CreateUsuarioController } from './controllers/usuario/CreateUsuarioController'
-import { AuthUsuarioController } from './controllers/usuario/AuthUsuarioController';
-import { DetailUsuarioController } from './controllers/usuario/DetailUsuarioController';
+import { AutenticarUsuarioController } from './controllers/usuario/AutenticarUsuarioController';
+import { UsuarioController } from './controllers/usuario/UsuarioController';
 import { IsAuthenticated } from './middlewares/IsAuthenticated';
 
 const router = Router();
@@ -9,8 +8,8 @@ const router = Router();
 //-- Rotas --
 
 // USUARIO
-router.post('/usuario', new CreateUsuarioController().handle)
-router.post('/login', new AuthUsuarioController().handle)
-router.get('/usuarioinfo', IsAuthenticated, new DetailUsuarioController().handle)
+router.post('/usuario', new UsuarioController().post)
+router.post('/login', new AutenticarUsuarioController().autenticar)
+router.get('/usuarioinfo', IsAuthenticated, new UsuarioController().get)
 
 export {router};
