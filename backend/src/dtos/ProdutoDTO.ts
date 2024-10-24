@@ -3,13 +3,13 @@ import { ItemPedidoDTO } from "./ItemPedidoDTO";
 import { TransacaoDTO } from "./TransacaoDTO";
 
 export type ProdutoDTO = {
-    id: bigint;
+    id?: number;
     nome: string;
     descricao: string;
     preco: number;
     quantidade: number;
     imagem: Uint8Array;
-    fornecedorId: bigint;
+    fornecedorId: number;
     fornecedor?: FornecedorDTO;
     itenspedido?: ItemPedidoDTO[];
     transacoes?: TransacaoDTO[];

@@ -1,7 +1,7 @@
 import { ProdutoDTO } from "./ProdutoDTO";
 
 export type FornecedorDTO = {
-    id: bigint;
+    id?: number;
     nome: string;
     cnpj: string;
     contato: string;

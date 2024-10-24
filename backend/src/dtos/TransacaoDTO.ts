@@ -2,12 +2,12 @@ import { PedidoDTO } from "./PedidoDTO";
 import { ProdutoDTO } from "./ProdutoDTO";
 
 export type TransacaoDTO = {
-    id?: BigInt;
+    id?: number;
     data: Date;
     tipo: string;
     valor: number;
-    produtoId: BigInt;
-    pedidoId: BigInt;
+    produtoId: number;
+    pedidoId: number;
     produto?: ProdutoDTO;
     pedido?: PedidoDTO;
   }

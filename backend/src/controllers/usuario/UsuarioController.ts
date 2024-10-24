@@ -4,11 +4,11 @@ import { UsuarioDTO } from "../../dtos/UsuarioDTO";
 
 class UsuarioController {
     async get(req: Request, res: Response){
-        const usuario_id = req.usuario_id;
+        const idusuario = req.idusuario;
 
-        const detailUsuarioService =  new UsuarioService();
+        const usuarioService =  new UsuarioService();
 
-        const usuario = await detailUsuarioService.get(usuario_id);
+        const usuario = await usuarioService.get(idusuario);
 
         return res.json(usuario);
     }
@@ -16,10 +16,9 @@ class UsuarioController {
     async post(req: Request, res: Response) {
         const usuarioReq: UsuarioDTO = req.body;
 
-        const createUsuarioService = new UsuarioService();
+        const usuarioService = new UsuarioService();
 
-        const usuarioRes = await createUsuarioService.post(usuarioReq);
-        if(usuarioRes )
+        const usuarioRes = await usuarioService.post(usuarioReq);
 
         return res.json(usuarioRes);
     }
@@ -27,10 +26,19 @@ class UsuarioController {
     async put(req: Request, res: Response) {
         const usuarioReq: UsuarioDTO = req.body;
 
-        const createUsuarioService = new UsuarioService();
+        const usuarioService = new UsuarioService();
 
-        const usuarioRes = await createUsuarioService.post(usuarioReq);
-        if(usuarioRes )
+        const usuarioRes = await usuarioService.put(usuarioReq);
+
+        return res.json(usuarioRes);
+    }
+
+    async delete(req: Request, res: Response) {
+        const idusuario = req.idusuario;
+
+        const usuarioService = new UsuarioService();
+
+        const usuarioRes = await usuarioService.delete(idusuario);
 
         return res.json(usuarioRes);
     }

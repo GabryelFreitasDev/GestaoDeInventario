@@ -1,4 +1,4 @@
-export default interface AuthRequest {
+export default interface AutenticarRequest {
     email: string
     senha: string
 }

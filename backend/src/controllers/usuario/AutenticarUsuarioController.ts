@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { AutenticarUsuarioService } from "../../services/usuario/AutenticarUsuarioService";
-import AuthRequest from "../../interfaces/AuthRequest";
+import AutenticarRequest from "../../interfaces/AuthRequest";
 
 class AutenticarUsuarioController {
     async autenticar(req: Request, res: Response) {
-        const authRequest: AuthRequest = req.body;
+        const autenticarRequest: AutenticarRequest = req.body;
 
-        const authUsuarioService = new AutenticarUsuarioService();
+        const autenticarUsuarioService = new AutenticarUsuarioService();
 
-        const auth = await authUsuarioService.execute(authRequest);
+        const autenticar = await autenticarUsuarioService.autenticar(autenticarRequest);
 
-        return res.json(auth);
+        return res.json(autenticar);
     }
 }
 

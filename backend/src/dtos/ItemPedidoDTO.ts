@@ -2,9 +2,9 @@ import { PedidoDTO } from "./PedidoDTO";
 import { ProdutoDTO } from "./ProdutoDTO";
 
 export type ItemPedidoDTO = {
-    id: bigint;
-    pedidoId: bigint;
-    produtoId: bigint;
+    id?: number;
+    pedidoId: number;
+    produtoId: number;
     quantidade: number;
     precoUnitario: number;
     pedido?: PedidoDTO;

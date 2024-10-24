@@ -5,7 +5,7 @@ interface PayLoad {
     sub: string;
 }
 
-export function IsAuthenticated(req: Request, res: Response, next: NextFunction) {
+export function AutenticarUsuario(req: Request, res: Response, next: NextFunction) {
     const authToken = req.headers.authorization;
 
     if (!authToken) {
@@ -17,7 +17,7 @@ export function IsAuthenticated(req: Request, res: Response, next: NextFunction)
     try {
         const { sub } = verify(token, process.env.JWT_SECRET) as PayLoad;
 
-        req.usuario_id = Number(sub);
+        req.idusuario = Number(sub);
 
         return next();
     } catch (err) {

@@ -3,9 +3,9 @@ import { ItemPedidoDTO } from "./ItemPedidoDTO";
 import { TransacaoDTO } from "./TransacaoDTO";
 
 export type PedidoDTO = {
-    id: bigint;
+    id?: number;
     data: Date;
-    clienteId: bigint;
+    clienteId: number;
     status: string;
     total: number;
     cliente?: ClienteDTO;

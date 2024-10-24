@@ -5,7 +5,7 @@ import { sign } from "jsonwebtoken";
 import 'dotenv/config';
 
 class AutenticarUsuarioService {
-    async execute(authRequest: AuthRequest) {
+    async autenticar(authRequest: AuthRequest) {
 
         const usuario = await validaLogin(authRequest);
 

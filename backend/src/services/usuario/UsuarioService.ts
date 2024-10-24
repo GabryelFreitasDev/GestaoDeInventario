@@ -9,10 +9,10 @@ const selectUsuario = {
 }
 
 class UsuarioService {
-    async get(usuario_id: number) {
+    async get(id: number) {
         const usuario = await prismaClient.usuario.findFirst({
             where:{
-                id: usuario_id
+                id: id
             }, 
             select: selectUsuario
         });
@@ -33,6 +33,30 @@ class UsuarioService {
             })
 
         return usuarioSalvo;
+    }
+
+    async put(usuario: UsuarioDTO) { 
+        const senhaHash = await hash(usuario.senha, 8);
+        const usuarioSalvo = await prismaClient.usuario.update(
+            {
+                data: {
+                    nome: usuario.senha,
+                    email: usuario.email,
+                    senha: senhaHash
+                },
+                select: selectUsuario,
+                where: { id: usuario.id }
+            })
+
+        return usuarioSalvo;
+    }
+
+    async delete(id: number) {
+        const usuario = await prismaClient.usuario.delete({
+            select: selectUsuario,
+            where: { id: id }
+        })
+        return usuario;
     }
 }
 
