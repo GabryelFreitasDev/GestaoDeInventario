@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { clsx } from 'clsx';
 import * as zod from 'zod';
-import logo from '../assets/logo.svg';
-import { useNavigate } from 'react-router-dom';
+
+import logo from '../assets/logo.svg';  
+import { UsuarioContext } from '@/contexts/UsuarioContext';
+import { toast } from 'react-toastify';
 
 type PasswordType = 'password' | 'text';
 
@@ -17,8 +19,10 @@ type NewLoginFormData = zod.infer<typeof loginFormValidationSchema>;
 
 export default function Login() {
   const [inputPasswordType, setInputPasswordType] = useState<PasswordType>('password');
-  const [isSignUp, setIsSignUp] = useState(false); 
-  const navigate = useNavigate();
+
+  const { login } = useContext(UsuarioContext);
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
   const handleTogglePasswordType = (type: PasswordType) => {
     setInputPasswordType(type === 'password' ? 'text' : 'password');
@@ -28,16 +32,20 @@ export default function Login() {
     resolver: zodResolver(loginFormValidationSchema),
   });
 
-  const { register, handleSubmit, formState, reset } = loginForm;
+  const { formState, reset } = loginForm;
   const { errors } = formState;
 
-  const handleFormSubmit = (data: NewLoginFormData) => {
-    console.log(data);
-    reset();
-    if (isSignUp) {
-      console.log("Usuário registrado com sucesso!");
-    } else {
-      navigate('/dashboard'); // Redireciona para o dashboard, excluir depois
+async function handleLoginSubmit(event: FormEvent) {
+    try{
+      event.preventDefault();
+
+      const data = { email, senha };
+      await login(data);
+
+      reset();
+    }  catch (error) {
+      toast.error("Erro ao tentar realizar o login!");
+      console.log(error);
     }
   };
 
@@ -53,16 +61,25 @@ export default function Login() {
             <p className="text-gray-600">
               {isSignUp ? 'Inscreva-se para começar a gerenciar seus produtos.' : 'Faça login para começar a gerenciar seus produtos.'}
             </p>
-          </header>
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit(handleFormSubmit)}>
-            <div className="flex flex-col gap-2">
-              <label className="font-sans font-semibold text-sm text-gray-800" htmlFor="email">
-                E-mail
-              </label>
-              <input
-                className={clsx(
-                  'px-4 py-3 bg-white text-sm text-gray-800 leading-5 border border-gray-200 rounded placeholder:text-gray-200 outline-none focus:border-blue-500',
-                  { 'border-red': errors.email, 'focus:border-red': errors.email }
+            </header>
+            <form className="flex flex-col gap-4" onSubmit={handleLoginSubmit}>
+              <div className="flex flex-col gap-2">
+                <label className="font-sans font-semibold text-sm text-gray-800" htmlFor="email">
+                  E-mail
+                </label>
+                <input
+                  className={clsx(
+                    'px-4 py-3 bg-white text-sm text-gray-800 leading-5 border border-gray-200 rounded placeholder:text-gray-200 outline-none focus:border-purple-500',
+                    { 'border-red': errors.email, 'focus:border-red': errors.email }
+                  )}
+                  type="email"
+                  id="email"
+                  placeholder="Digite seu e-mail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {errors.email && (
+                  <span className="text-red text-sm">{errors.email?.message}</span>
                 )}
                 type="email"
                 id="email"

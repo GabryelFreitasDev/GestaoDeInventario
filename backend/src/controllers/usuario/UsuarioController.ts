@@ -7,9 +7,13 @@ class UsuarioController {
         const idusuario = req.idusuario;
 
         const usuarioService =  new UsuarioService();
+        let usuario;
 
-        const usuario = await usuarioService.get(idusuario);
-
+        if(idusuario !== null)
+            usuario = await usuarioService.get(idusuario);
+        else
+            usuario = await usuarioService.getAll();
+         
         return res.json(usuario);
     }
 

@@ -14,47 +14,47 @@ const router = Router();
 //-- Rotas --
 
 //USUARIO
-router.post('/autenticarUsuario', new AutenticarUsuarioController().autenticar)
-router.get('/getUsuario', AutenticarUsuario, new UsuarioController().get)
-router.post('/postUsuario', AutenticarUsuario, new UsuarioController().post)
-router.put('/putUsuario', AutenticarUsuario, new UsuarioController().put)
-router.delete('/deleteUsuario', AutenticarUsuario, new UsuarioController().delete)
+router.post('/Usuario/AutenticarUsuario', new AutenticarUsuarioController().autenticar)
+router.get('/Usuario', AutenticarUsuario, new UsuarioController().get)
+router.post('/Usuario', AutenticarUsuario, new UsuarioController().post)
+router.put('/Usuario', AutenticarUsuario, new UsuarioController().put)
+router.delete('/Usuario', AutenticarUsuario, new UsuarioController().delete)
 
 //CLIENTE
-router.get('/getCliente', AutenticarUsuario, new ClienteController().get)
-router.post('/postCliente', AutenticarUsuario, new ClienteController().post)
-router.put('/putCliente', AutenticarUsuario, new ClienteController().put)
-router.delete('/deleteCliente', AutenticarUsuario, new ClienteController().delete)
+router.get('/Cliente', AutenticarUsuario, new ClienteController().get)
+router.post('/Cliente', AutenticarUsuario, new ClienteController().post)
+router.put('/Cliente', AutenticarUsuario, new ClienteController().put)
+router.delete('/Cliente', AutenticarUsuario, new ClienteController().delete)
 
 //FORNECEDOR
-router.get('/getFornecedor', AutenticarUsuario, new FornecedorController().get)
-router.post('/postFornecedor', AutenticarUsuario, new FornecedorController().post)
-router.put('/putFornecedor', AutenticarUsuario, new FornecedorController().put)
-router.delete('/deleteFornecedor', AutenticarUsuario, new FornecedorController().delete)
+router.get('/Fornecedor', AutenticarUsuario, new FornecedorController().get)
+router.post('/Fornecedor', AutenticarUsuario, new FornecedorController().post)
+router.put('/Fornecedor', AutenticarUsuario, new FornecedorController().put)
+router.delete('/Fornecedor', AutenticarUsuario, new FornecedorController().delete)
 
 //PRODUTO
-router.get('/getProduto', AutenticarUsuario, new ProdutoController().get)
-router.post('/postProduto', AutenticarUsuario, new ProdutoController().post)
-router.put('/putProduto', AutenticarUsuario, new ProdutoController().put)
-router.delete('/deleteProduto', AutenticarUsuario, new ProdutoController().delete)
+router.get('/Produto', AutenticarUsuario, new ProdutoController().get)
+router.post('/Produto', AutenticarUsuario, new ProdutoController().post)
+router.put('/Produto', AutenticarUsuario, new ProdutoController().put)
+router.delete('/Produto', AutenticarUsuario, new ProdutoController().delete)
 
 //PEDIDO
-router.get('/getPedido', AutenticarUsuario, new PedidoController().get)
-router.post('/postPedido', AutenticarUsuario, new PedidoController().post)
-router.put('/putPedido', AutenticarUsuario, new PedidoController().put)
-router.delete('/deletePedido', AutenticarUsuario, new PedidoController().delete)
+router.get('/Pedido', AutenticarUsuario, new PedidoController().get)
+router.post('/Pedido', AutenticarUsuario, new PedidoController().post)
+router.put('/Pedido', AutenticarUsuario, new PedidoController().put)
+router.delete('/Pedido', AutenticarUsuario, new PedidoController().delete)
 
 //ITEMPEDIDO
-router.get('/getItemPedido', AutenticarUsuario, new ItemPedidoController().get)
-router.post('/postItemPedido', AutenticarUsuario, new ItemPedidoController().post)
-router.put('/putItemPedido', AutenticarUsuario, new ItemPedidoController().put)
-router.delete('/deleteItemPedido', AutenticarUsuario, new ItemPedidoController().delete)
+router.get('/ItemPedido', AutenticarUsuario, new ItemPedidoController().get)
+router.post('/ItemPedido', AutenticarUsuario, new ItemPedidoController().post)
+router.put('/ItemPedido', AutenticarUsuario, new ItemPedidoController().put)
+router.delete('/ItemPedido', AutenticarUsuario, new ItemPedidoController().delete)
 
 //TRANSACAO
-router.get('/getTransacao', AutenticarUsuario, new TransacaoController().get)
-router.post('/postTransacao', AutenticarUsuario, new TransacaoController().post)
-router.put('/putTransacao', AutenticarUsuario, new TransacaoController().put)
-router.delete('/deleteTransacao', AutenticarUsuario, new TransacaoController().delete)
+router.get('/Transacao', AutenticarUsuario, new TransacaoController().get)
+router.post('/Transacao', AutenticarUsuario, new TransacaoController().post)
+router.put('/Transacao', AutenticarUsuario, new TransacaoController().put)
+router.delete('/Transacao', AutenticarUsuario, new TransacaoController().delete)
 
 
 

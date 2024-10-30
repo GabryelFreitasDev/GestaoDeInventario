@@ -1,24 +1,33 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login  from './pages/login'; 
-import Dashboard  from './pages/dashboard'; 
-import { CadastroProdutos } from './pages/Produtos/cadastroProdutos';
-import { ListagemClientes } from './pages/Clientes/listagemClientes';
-import { CadastroClientes } from './pages/Clientes/cadastroClientes';
+// src/App.tsx
+import { Route, Routes } from 'react-router-dom';
+import Login from './pages/login';
+import Dashboard from './pages/dashboard';
+import { CadastroProdutos } from './pages/produtos/cadastroProdutos/cadastroProdutos';
+import { ListagemClientes } from './pages/clientes/listagemClientes/listagemClientes';
+import { CadastroClientes } from './pages/clientes/cadastroClientes/cadastroClientes';
+import { AutenticarProvider } from './contexts/UsuarioContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { RotaProtegida } from './components/RotaProtegida';
 
 function App() {
   return (
-    <Router>
+    <AutenticarProvider>
+      <ToastContainer autoClose={3000} />
       <Routes>
-        <Route path="/" element={<Login />} />  
-        <Route path="/dashboard" element={<Dashboard />} /> 
-        <Route path="/produtos" element={<CadastroProdutos />} />
-        <Route path="/clientes" element={<ListagemClientes />} />  
-        <Route path="/clientes/cadastro" element={<CadastroClientes />} />  
+        {/* Rota pública: Login */}
+        <Route path="/" element={<Login />} />
+
+        {/* Rotas protegidas */}
+        <Route element={<RotaProtegida />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/produtos" element={<CadastroProdutos />} />
+          <Route path="/clientes" element={<ListagemClientes />} />
+          <Route path="/clientes/cadastro" element={<CadastroClientes />} />
+        </Route>
       </Routes>
-    </Router>
+    </AutenticarProvider>
   );
 }
 
 export default App;
-
-
