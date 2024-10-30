@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useState } from "react";
+import Sidebar from "../components/Sidebar/sidebar";
+import DashboardContent from "../components/dashboardcontent";
 
-export default function Dashboard() {
+const Dashboard = () => {
+  const [open, setOpen] = useState(true);
+
   return (
-    <div>
-      <h1>Página do Dashboard</h1>
-      
+    <div className="flex">
+      <Sidebar open={open} setOpen={setOpen} />
+      <DashboardContent />
     </div>
   );
-}
+};
+
+export default Dashboard;
