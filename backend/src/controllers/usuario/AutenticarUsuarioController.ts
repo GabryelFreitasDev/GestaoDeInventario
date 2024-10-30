@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
+import AutenticarRequest from "../../interfaces/AutenticarRequest";
 import { AutenticarUsuarioService } from "../../services/usuario/AutenticarUsuarioService";
-import AutenticarRequest from "../../interfaces/AuthRequest";
+
 
 class AutenticarUsuarioController {
     async autenticar(req: Request, res: Response) {

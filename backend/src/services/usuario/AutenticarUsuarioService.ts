@@ -1,6 +1,6 @@
 import { compare } from "bcryptjs";
 import prismaClient from "../../prisma";
-import AuthRequest from "../../interfaces/AuthRequest";
+import AuthRequest from "../../interfaces/AutenticarRequest";
 import { sign } from "jsonwebtoken";
 import 'dotenv/config';
 

@@ -13,7 +13,7 @@ export function AutenticarUsuario(req: Request, res: Response, next: NextFunctio
     }
 
     const [, token] = authToken.split(" ");
-
+   
     try {
         const { sub } = verify(token, process.env.JWT_SECRET) as PayLoad;
 

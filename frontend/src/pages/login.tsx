@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { clsx } from 'clsx';
 import * as zod from 'zod';
 import logo from '../assets/logo.svg';  
-import { useNavigate } from 'react-router-dom'; // Importando useNavigate, excluir depois
+import { UsuarioContext } from '@/contexts/UsuarioContext';
+import { toast } from 'react-toastify';
 
 type PasswordType = 'password' | 'text';
 
@@ -17,7 +18,9 @@ type NewLoginFormData = zod.infer<typeof loginFormValidationSchema>;
 
 export default function Login() {
   const [inputPasswordType, setInputPasswordType] = useState<PasswordType>('password');
-  const navigate = useNavigate(); // Inicializando o hook useNavigate, excluir depois
+  const { login } = useContext(UsuarioContext);
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
   const handleTogglePasswordType = (type: PasswordType) => {
     switch (type) {
@@ -35,14 +38,21 @@ export default function Login() {
     resolver: zodResolver(loginFormValidationSchema),
   });
 
-  const { register, handleSubmit, formState, reset } = loginForm;
+  const { formState, reset } = loginForm;
   const { errors } = formState;
 
-  const handleLoginSubmit = (data: NewLoginFormData) => {
-    console.log(data);
-    reset();
-    navigate('/dashboard'); // Redireciona para a página do dashboard após o login, exclui depois
-    navigate('/products'); // Redireciona para a página do products após o login, exclui depois
+async function handleLoginSubmit(event: FormEvent) {
+    try{
+      event.preventDefault();
+
+      const data = { email, senha };
+      await login(data);
+
+      reset();
+    }  catch (error) {
+      toast.error("Erro ao tentar realizar o login!");
+      console.log(error);
+    }
   };
 
   return (
@@ -59,7 +69,7 @@ export default function Login() {
                 Faça login ou registre-se para começar a gerenciar seus produtos ainda hoje.
               </p>
             </header>
-            <form className="flex flex-col gap-4" onSubmit={handleSubmit(handleLoginSubmit)}>
+            <form className="flex flex-col gap-4" onSubmit={handleLoginSubmit}>
               <div className="flex flex-col gap-2">
                 <label className="font-sans font-semibold text-sm text-gray-800" htmlFor="email">
                   E-mail
@@ -72,7 +82,8 @@ export default function Login() {
                   type="email"
                   id="email"
                   placeholder="Digite seu e-mail"
-                  {...register('email')}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 {errors.email && (
                   <span className="text-red text-sm">{errors.email?.message}</span>
@@ -97,7 +108,8 @@ export default function Login() {
                   id="password"
                   type={inputPasswordType}
                   placeholder="Digite sua senha"
-                  {...register('password')}
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
                 />
                 <button
                   className="absolute right-4 top-11 text-gray-400"

@@ -20,6 +20,14 @@ class UsuarioService {
         return usuario;
     }
 
+    async getAll() {
+        const usuario = await prismaClient.usuario.findMany({
+            select: selectUsuario
+        });
+
+        return usuario;
+    }
+
     async post(usuario: UsuarioDTO) { 
         await validaExistenciaUsuario(usuario);
         const senhaHash = await hash(usuario.senha, 8);
