@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Sidebar from "../components/Sidebar/sidebar";
-import DashboardContent from "../components/dashboardcontent";
+import DashboardContent from "@/components/dashboardContent";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(true);

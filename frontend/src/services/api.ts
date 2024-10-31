@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { AutenticarTokenError } from './errors/AutenticarTokenError';
+import Cookies from 'js-cookie';
 
 export function setupAPIClient() {
     const api = axios.create({
@@ -11,7 +12,7 @@ export function setupAPIClient() {
     }, (error: AxiosError) => {
         if (error.response?.status === 401) {
             if (typeof window !== 'undefined') {
-               console.log("Não")// deslogar();  // Usando deslogar passado como argumento
+               //deslogar();  
             } else {
                 return Promise.reject(new AutenticarTokenError());
             }
@@ -22,7 +23,7 @@ export function setupAPIClient() {
     return api;
 }
 
-// function deslogar() {
-//     Cookies.remove('@autenticar.token'); // Remove o token
-//     window.location.href = '/'; // Redireciona para a página de login
-//   }
+function deslogar() {
+    Cookies.remove('@autenticar.token'); 
+    window.location.href = '/'; 
+  }

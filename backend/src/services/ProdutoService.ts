@@ -35,6 +35,14 @@ class ProdutoService {
         return produto;
     }
 
+    async getAll() {
+        const produto = await prismaClient.produto.findMany({
+            select: selectProduto
+        });
+
+        return produto;
+    }
+
     async post(produto: ProdutoDTO) { 
         const produtoSalvo = await prismaClient.produto.create(
             {

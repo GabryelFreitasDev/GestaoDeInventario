@@ -8,8 +8,6 @@ import logo from '../assets/logo.svg';
 import { UsuarioContext } from '@/contexts/UsuarioContext';
 import { toast } from 'react-toastify';
 
-type PasswordType = 'password' | 'text';
-
 const loginFormValidationSchema = zod.object({
   email: zod.string().email('Digite um e-mail válido'),
   password: zod.string().nonempty('Digite a sua senha'),
@@ -18,15 +16,11 @@ const loginFormValidationSchema = zod.object({
 type NewLoginFormData = zod.infer<typeof loginFormValidationSchema>;
 
 export default function Login() {
-  const [inputPasswordType, setInputPasswordType] = useState<PasswordType>('password');
-  const [isSignUp, setIsSignUp] = useState(false); 
   const { login } = useContext(UsuarioContext);
+  
+  const [isSignUp, setIsSignUp] = useState(false); 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-
-  const handleTogglePasswordType = (type: PasswordType) => {
-    setInputPasswordType(type === 'password' ? 'text' : 'password');
-  };
 
   const loginForm = useForm<NewLoginFormData>({
     resolver: zodResolver(loginFormValidationSchema),
@@ -101,18 +95,11 @@ async function handleLoginSubmit(event: FormEvent) {
                   { 'border-red': errors.password, 'focus:border-red': errors.password }
                 )}
                 id="password"
-                type={inputPasswordType}
+                type="password"
                 placeholder="Digite sua senha"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
               />
-              <button
-                className="absolute right-4 top-11 text-gray-400"
-                type="button"
-                onClick={() => handleTogglePasswordType(inputPasswordType)}
-              >
-                {/* {inputPasswordType === 'password' ? <EyeSlash /> : <Eye />} */}
-              </button>
               {errors.password && (
                 <span className="text-red text-sm">{errors.password?.message}</span>
               )}

@@ -6,7 +6,7 @@ export interface Produto {
     descricao: string;
     preco: number;
     quantidade: number;
-    imagem: Uint8Array;
+    imagem: string;
     fornecedorId: number;
     fornecedor?: Fornecedor;
   }

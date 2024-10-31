@@ -6,16 +6,20 @@ class ProdutoController {
     async get(req: Request, res: Response){
         const idproduto = req.query.id;
 
-        const detailProdutoService =  new ProdutoService();
+        const produtoService =  new ProdutoService();
+        let produto;
 
-        const produto = await detailProdutoService.get(Number(idproduto));
+        if(idproduto !== null && idproduto !== undefined)
+            produto = await produtoService.get(Number(idproduto));
+        else
+            produto = await produtoService.getAll();
 
         return res.json(produto);
     }
 
     async post(req: Request, res: Response) {
         const produtoReq: ProdutoDTO = req.body;
-
+        console.log(req.body);
         const createProdutoService = new ProdutoService();
 
         const produtoRes = await createProdutoService.post(produtoReq);

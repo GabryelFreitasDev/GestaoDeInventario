@@ -16,6 +16,7 @@ type UsuarioProps = {
     idusuario: string;
     nome: string;
     email: string;
+    token: string;
 }
 
 type LoginProps = {
@@ -43,9 +44,9 @@ export function AutenticarProvider({ children }: AutenticarProviderProps) {
 
     useEffect(() => {
         if (usuario?.idusuario) {
-            api.get('/Usuario', { params: { idusuario: usuario?.idusuario } }).then((response) => {
-                const { idusuario, nome, email } = response.data;
-                setUsuario({ idusuario, nome, email });
+            api.get('/Usuario/AutenticarUsuario', { params: { idusuario: usuario?.idusuario } }).then((response) => {
+                const { idusuario, nome, email, token } = response.data;
+                setUsuario({ idusuario, nome, email, token });
             }).catch(() => {
                 deslogar();
             });
@@ -62,7 +63,7 @@ export function AutenticarProvider({ children }: AutenticarProviderProps) {
                 path: "/"
             });
 
-            setUsuario({ idusuario, nome, email });
+            setUsuario({ idusuario, nome, email, token });
 
             navigate('/dashboard');
             toast.success(`Bem vindo ${nome}, como posso te ajudar hoje?`, { pauseOnHover: false });

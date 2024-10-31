@@ -8,7 +8,7 @@ export type ProdutoDTO = {
     descricao: string;
     preco: number;
     quantidade: number;
-    imagem: Uint8Array;
+    imagem: Uint8Array | string;
     fornecedorId: number;
     fornecedor?: FornecedorDTO;
     itenspedido?: ItemPedidoDTO[];
