@@ -19,7 +19,7 @@ type NewLoginFormData = zod.infer<typeof loginFormValidationSchema>;
 
 export default function Login() {
   const [inputPasswordType, setInputPasswordType] = useState<PasswordType>('password');
-
+  const [isSignUp, setIsSignUp] = useState(false); 
   const { login } = useContext(UsuarioContext);
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -78,13 +78,6 @@ async function handleLoginSubmit(event: FormEvent) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                {errors.email && (
-                  <span className="text-red text-sm">{errors.email?.message}</span>
-                )}
-                type="email"
-                id="email"
-                placeholder="Digite seu e-mail"
-                {...register('email')} />
               {errors.email && (
                 <span className="text-red text-sm">{errors.email?.message}</span>
               )}
@@ -110,7 +103,9 @@ async function handleLoginSubmit(event: FormEvent) {
                 id="password"
                 type={inputPasswordType}
                 placeholder="Digite sua senha"
-                {...register('password')} />
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+              />
               <button
                 className="absolute right-4 top-11 text-gray-400"
                 type="button"
