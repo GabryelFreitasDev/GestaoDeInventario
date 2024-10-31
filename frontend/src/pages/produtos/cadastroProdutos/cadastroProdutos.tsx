@@ -19,7 +19,7 @@ const produtoFormValidationSchema = zod.object({
 
 type NovoProdutoFormData = zod.infer<typeof produtoFormValidationSchema>;
 
-export function CadastroProdutos( data?: Produto) {
+export function CadastroProdutos() {
   //const id = data?.id;
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
@@ -40,7 +40,6 @@ export function CadastroProdutos( data?: Produto) {
   const { errors } = formState;
 
   async function handleProdutoSubmit() {
-    console.log(data);
     
     const produto: Produto = {
       nome: nome,
@@ -54,9 +53,6 @@ export function CadastroProdutos( data?: Produto) {
     mutate(produto)
 
     navigate("/produtos")
-    //reset();
-    //setImagemPreview([]);
-    //setImagens([]);
   }
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {

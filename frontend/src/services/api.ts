@@ -12,7 +12,7 @@ export function setupAPIClient() {
     }, (error: AxiosError) => {
         if (error.response?.status === 401) {
             if (typeof window !== 'undefined') {
-               //deslogar();  
+               deslogar();  
             } else {
                 return Promise.reject(new AutenticarTokenError());
             }
