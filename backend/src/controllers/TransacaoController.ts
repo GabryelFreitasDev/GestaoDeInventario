@@ -6,9 +6,13 @@ class TransacaoController {
     async get(req: Request, res: Response){
         const idtransacao = req.query.id;
 
-        const detailTransacaoService =  new TransacaoService();
+        const transacaoService =  new TransacaoService();
+        let transacao;
 
-        const transacao = await detailTransacaoService.get(Number(idtransacao));
+        if(idtransacao !== null && idtransacao !== undefined)
+            transacao = await transacaoService.get(Number(idtransacao));
+        else
+            transacao = await transacaoService.getAll();
 
         return res.json(transacao);
     }

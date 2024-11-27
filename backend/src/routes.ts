@@ -15,8 +15,8 @@ const router = Router();
 
 //USUARIO
 router.post('/Usuario/AutenticarUsuario', new AutenticarUsuarioController().autenticar)
+router.post('/Usuario', new UsuarioController().post)
 router.get('/Usuario', AutenticarUsuario, new UsuarioController().get)
-router.post('/Usuario', AutenticarUsuario, new UsuarioController().post)
 router.put('/Usuario', AutenticarUsuario, new UsuarioController().put)
 router.delete('/Usuario', AutenticarUsuario, new UsuarioController().delete)
 

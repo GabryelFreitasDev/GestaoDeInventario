@@ -1,24 +1,10 @@
 import Sidebar from '@/components/Sidebar/sidebar'
+import { useCliente } from '@/hooks/cliente/useCliente';
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-// Tipo para representar um cliente
-type Cliente = {
-  id: number
-  nome: string
-  contato: string
-  tipoPessoa: 'fisica' | 'juridica'
-  cpfCnpj: string
-}
-
-// Dados de exemplo
-const clientesExemplo: Cliente[] = [
-  { id: 1, nome: 'João Silva', contato: '(11) 99999-9999', tipoPessoa: 'fisica', cpfCnpj: '123.456.789-00' },
-  { id: 2, nome: 'Empresa XYZ', contato: '(11) 88888-8888', tipoPessoa: 'juridica', cpfCnpj: '12.345.678/0001-00' },
-]
-
 export function ListagemClientes() {
-  const [clientes] = useState<Cliente[]>(clientesExemplo)
+  const { data } = useCliente();
   const [clienteSelecionado, setClienteSelecionado] = useState<number | null>(null)
   const [open, setOpen] = useState(true);
 
@@ -71,16 +57,16 @@ export function ListagemClientes() {
                 </tr>
               </thead>
               <tbody>
-                {clientes.map((cliente) => (
+                {data?.map((cliente) => (
                   <tr
                     key={cliente.id}
-                    onClick={() => setClienteSelecionado(cliente.id)}
+                    onClick={() => setClienteSelecionado(cliente.id ?? 1)}
                     className={`cursor-pointer hover:bg-gray-100 ${clienteSelecionado === cliente.id ? 'bg-purple-100' : ''}`}
                   >
                     <td className="py-2 px-4 border-b">{cliente.nome}</td>
+                    <td className="py-2 px-4 border-b">{cliente.cpf_cnpj}</td>
                     <td className="py-2 px-4 border-b">{cliente.contato}</td>
-                    <td className="py-2 px-4 border-b">{cliente.tipoPessoa === 'fisica' ? 'Física' : 'Jurídica'}</td>
-                    <td className="py-2 px-4 border-b">{cliente.cpfCnpj}</td>
+                    <td className="py-2 px-4 border-b">{cliente.endereco}</td>
                   </tr>
                 ))}
               </tbody>

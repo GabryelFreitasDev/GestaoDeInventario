@@ -31,6 +31,14 @@ class FornecedorService {
         return fornecedor;
     }
 
+    async getAll() {
+        const fornecedor = await prismaClient.fornecedor.findMany({
+            select: selectFornecedor
+        });
+
+        return fornecedor;
+    }
+
     async post(fornecedor: FornecedorDTO) { 
         const fornecedorSalvo = await prismaClient.fornecedor.create(
             {

@@ -21,6 +21,7 @@ function dataCliente(cliente: ClienteDTO){
 
 class ClienteService {
     async get(id: number) {
+        console.log(id);
         const cliente = await prismaClient.cliente.findFirst({
             where:{
                 id: id
@@ -31,7 +32,16 @@ class ClienteService {
         return cliente;
     }
 
+    async getAll() {
+        const cliente = await prismaClient.cliente.findMany({
+            select: selectCliente
+        });
+
+        return cliente;
+    }
+
     async post(cliente: ClienteDTO) { 
+        console.log(cliente);
         const clienteSalvo = await prismaClient.cliente.create(
             {
                 data: dataCliente(cliente),

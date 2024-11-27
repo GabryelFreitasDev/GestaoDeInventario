@@ -19,7 +19,7 @@ class UsuarioController {
 
     async post(req: Request, res: Response) {
         const usuarioReq: UsuarioDTO = req.body;
-
+        console.log(usuarioReq);
         const usuarioService = new UsuarioService();
 
         const usuarioRes = await usuarioService.post(usuarioReq);

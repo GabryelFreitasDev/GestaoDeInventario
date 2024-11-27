@@ -1,23 +1,10 @@
 import Sidebar from '@/components/Sidebar/sidebar'
+import { useFornecedor } from '@/hooks/fornecedor/useFornecedor';
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-// Tipo para representar um fornecedor
-type Fornecedor = {
-  id: number;
-  nome: string;
-  contato: string;
-  endereco: string;
-};
-
-// Dados de exemplo
-const fornecedoresExemplo: Fornecedor[] = [
-  { id: 1, nome: 'Fornecedor A', contato: '(11) 99999-9999', endereco: 'Rua A, 123' },
-  { id: 2, nome: 'Fornecedor B', contato: '(11) 88888-8888', endereco: 'Av B, 456' },
-]
-
 export function ListagemFornecedores() {
-  const [fornecedores] = useState<Fornecedor[]>(fornecedoresExemplo)
+  const { data } = useFornecedor();
   const [fornecedorSelecionado, setFornecedorSelecionado] = useState<number | null>(null)
   const [open, setOpen] = useState(true);
 
@@ -68,10 +55,10 @@ export function ListagemFornecedores() {
                 </tr>
               </thead>
               <tbody>
-                {fornecedores.map((fornecedor) => (
+                {data?.map((fornecedor) => (
                   <tr
                     key={fornecedor.id}
-                    onClick={() => setFornecedorSelecionado(fornecedor.id)}
+                    onClick={() => setFornecedorSelecionado(fornecedor.id ?? 1)}
                     className={`cursor-pointer hover:bg-gray-100 ${fornecedorSelecionado === fornecedor.id ? 'bg-purple-100' : ''}`}
                   >
                     <td className="py-2 px-4 border-b">{fornecedor.nome}</td>

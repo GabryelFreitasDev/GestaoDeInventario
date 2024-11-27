@@ -12,7 +12,6 @@ const postProduto = async (data: Produto): Promise<AxiosResponse<Produto>> => {
         }} 
     );
 
-        console.log(response);
     return response;
 };
 

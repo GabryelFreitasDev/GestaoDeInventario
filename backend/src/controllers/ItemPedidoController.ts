@@ -6,9 +6,13 @@ class ItemPedidoController {
     async get(req: Request, res: Response){
         const iditempedido = req.query.id;
 
-        const detailItemPedidoService =  new ItemPedidoService();
+        const itempedidoService =  new ItemPedidoService();
+        let itempedido;
 
-        const itempedido = await detailItemPedidoService.get(Number(iditempedido));
+        if(iditempedido !== null && iditempedido !== undefined)
+            itempedido = await itempedidoService.get(Number(iditempedido));
+        else
+            itempedido = await itempedidoService.getAll();
 
         return res.json(itempedido);
     }

@@ -44,6 +44,7 @@ class ProdutoService {
     }
 
     async post(produto: ProdutoDTO) { 
+        console.log(produto);
         const produtoSalvo = await prismaClient.produto.create(
             {
                 data: dataProduto(produto),

@@ -6,9 +6,13 @@ class PedidoController {
     async get(req: Request, res: Response){
         const idpedido = req.query.id;
 
-        const detailPedidoService =  new PedidoService();
+        const pedidoService =  new PedidoService();
+        let pedido;
 
-        const pedido = await detailPedidoService.get(Number(idpedido));
+        if(idpedido !== null && idpedido !== undefined)
+            pedido = await pedidoService.get(Number(idpedido));
+        else
+            pedido = await pedidoService.getAll();
 
         return res.json(pedido);
     }

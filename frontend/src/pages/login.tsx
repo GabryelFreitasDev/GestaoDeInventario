@@ -4,44 +4,61 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { clsx } from 'clsx';
 import * as zod from 'zod';
 
-import logo from '../assets/logo.svg';  
+import logo from '../assets/logo.svg';
 import { UsuarioContext } from '@/contexts/UsuarioContext';
 import { toast } from 'react-toastify';
 
-const loginFormValidationSchema = zod.object({
+// Schema de validação
+const formValidationSchema = zod.object({
   email: zod.string().email('Digite um e-mail válido'),
   password: zod.string().nonempty('Digite a sua senha'),
+  nome: zod.string().min(3, 'O nome deve ter pelo menos 3 caracteres').optional(),
 });
 
-type NewLoginFormData = zod.infer<typeof loginFormValidationSchema>;
+type FormData = zod.infer<typeof formValidationSchema>;
 
 export default function Login() {
-  const { login } = useContext(UsuarioContext);
-  
-  const [isSignUp, setIsSignUp] = useState(false); 
+  const { login, cadastrar } = useContext(UsuarioContext);
+
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  const loginForm = useForm<NewLoginFormData>({
-    resolver: zodResolver(loginFormValidationSchema),
+  const form = useForm<FormData>({
+    resolver: zodResolver(formValidationSchema),
   });
 
-  const { formState, reset } = loginForm;
+  const { formState, reset } = form;
   const { errors } = formState;
 
-async function handleLoginSubmit(event: FormEvent) {
-    try{
-      event.preventDefault();
-
-      const data = { email, senha };
-      await login(data);
-
+  async function handleLoginSubmit(event: FormEvent) {
+    event.preventDefault();
+    try {
+      await login({ email, senha });
       reset();
-    }  catch (error) {
-      toast.error("Erro ao tentar realizar o login!");
-      console.log(error);
+    } catch (error) {
+      toast.error('Erro ao tentar realizar o login!');
+      console.error(error);
     }
-  };
+  }
+
+  async function handleSignUpSubmit(event: FormEvent) {
+    event.preventDefault();
+    try {
+      if (!nome.trim()) {
+        toast.error('O nome é obrigatório ao criar uma conta.');
+        return;
+      }
+
+      await cadastrar({ nome, email, senha });
+      setIsSignUp(false);
+      reset();
+    } catch (error) {
+      toast.error('Erro ao tentar realizar o cadastro!');
+      console.error(error);
+    }
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -55,39 +72,59 @@ async function handleLoginSubmit(event: FormEvent) {
             <p className="text-gray-600">
               {isSignUp ? 'Inscreva-se para começar a gerenciar seus produtos.' : 'Faça login para começar a gerenciar seus produtos.'}
             </p>
-            </header>
-            <form className="flex flex-col gap-4" onSubmit={handleLoginSubmit}>
+          </header>
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={isSignUp ? handleSignUpSubmit : handleLoginSubmit}
+          >
+            {/* Campo Nome (só aparece se estiver criando conta) */}
+            {isSignUp && (
               <div className="flex flex-col gap-2">
-                <label className="font-sans font-semibold text-sm text-gray-800" htmlFor="email">
-                  E-mail
+                <label className="font-sans font-semibold text-sm text-gray-800" htmlFor="nome">
+                  Nome
                 </label>
                 <input
                   className={clsx(
                     'px-4 py-3 bg-white text-sm text-gray-800 leading-5 border border-gray-200 rounded placeholder:text-gray-200 outline-none focus:border-purple-500',
-                    { 'border-red': errors.email, 'focus:border-red': errors.email }
+                    { 'border-red': errors.nome, 'focus:border-red': errors.nome }
                   )}
-                  type="email"
-                  id="email"
-                  placeholder="Digite seu e-mail"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  id="nome"
+                  placeholder="Digite seu nome"
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
                 />
+                {errors.nome && (
+                  <span className="text-red text-sm">{errors.nome?.message}</span>
+                )}
+              </div>
+            )}
+
+            {/* Campo Email */}
+            <div className="flex flex-col gap-2">
+              <label className="font-sans font-semibold text-sm text-gray-800" htmlFor="email">
+                E-mail
+              </label>
+              <input
+                className={clsx(
+                  'px-4 py-3 bg-white text-sm text-gray-800 leading-5 border border-gray-200 rounded placeholder:text-gray-200 outline-none focus:border-purple-500',
+                  { 'border-red': errors.email, 'focus:border-red': errors.email }
+                )}
+                type="email"
+                id="email"
+                placeholder="Digite seu e-mail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
               {errors.email && (
                 <span className="text-red text-sm">{errors.email?.message}</span>
               )}
             </div>
 
-            <div className="flex flex-col gap-2 relative">
-              <label
-                className="flex justify-between font-sans font-semibold text-sm text-gray-800"
-                htmlFor="password"
-              >
+            {/* Campo Senha */}
+            <div className="flex flex-col gap-2">
+              <label className="font-sans font-semibold text-sm text-gray-800" htmlFor="password">
                 Senha
-                {!isSignUp && (
-                  <a className="text-blue-500 hover:text-blue-400 hover:underline" href="#">
-                    Esqueceu a senha?
-                  </a>
-                )}
               </label>
               <input
                 className={clsx(
@@ -105,6 +142,7 @@ async function handleLoginSubmit(event: FormEvent) {
               )}
             </div>
 
+            {/* Botão e Link */}
             <footer className="flex flex-col gap-8">
               <button className="bg-blue-500 text-white font-bold py-4 rounded outline-none hover:bg-blue-400 hover:ring-1 hover:ring-blue-500 focus:ring-2 focus:ring-blue-400">
                 {isSignUp ? 'Registrar' : 'Entrar'}
@@ -123,5 +161,5 @@ async function handleLoginSubmit(event: FormEvent) {
         </main>
       </div>
     </div>
-  )
+  );
 }

@@ -1,14 +1,20 @@
 import { ItemPedido } from "@/interfaces/ItemPedido";
 import { api } from "@/services/apiClient";
+import { getToken } from "@/utils/getToken";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
-
-
 const postItemPedido = async (data: ItemPedido): Promise<AxiosResponse<ItemPedido>> => {
-    const response = api.post('/ItemPedido', data);
+    const token = getToken()
+    const response = await api.post('/ItemPedido', data, {
+        headers:{
+            Authorization: `Bearer ${token}`
+        }} 
+    );
+
     return response;
 };
+
 
 const deleteItemPedido = async (idItemPedido?: number): Promise<AxiosResponse<ItemPedido>> => {
     const response = api.delete(`/ItemPedido/${idItemPedido}`);

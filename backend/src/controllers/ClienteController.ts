@@ -4,11 +4,15 @@ import { ClienteService } from "../services/ClienteService";
 
 class ClienteController {
     async get(req: Request, res: Response){
-        const idcliente = req.params.id;
+        const idcliente = req.query.id;
 
-        const detailClienteService =  new ClienteService();
+        const clienteService =  new ClienteService();
+        let cliente;
 
-        const cliente = await detailClienteService.get(Number(idcliente));
+        if(idcliente !== null && idcliente !== undefined)
+            cliente = await clienteService.get(Number(idcliente));
+        else
+            cliente = await clienteService.getAll();
 
         return res.json(cliente);
     }

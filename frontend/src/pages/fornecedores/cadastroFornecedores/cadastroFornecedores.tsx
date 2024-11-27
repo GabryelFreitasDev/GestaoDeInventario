@@ -1,35 +1,33 @@
 import Sidebar from '@/components/Sidebar/sidebar';
+import { useFornecedorMutatePost } from '@/hooks/fornecedor/useFornecedorMutate';
+import { Fornecedor } from '@/interfaces/Fornecedor';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-// Tipo para representar um fornecedor
-type Fornecedor = {
-  id: number;
-  nome: string;
-  contato: string;
-  endereco: string;
-};
 
 export function CadastroFornecedores() {
-  const navigate = useNavigate();
+  const [nome, setNome] = useState('');
+  const [cnpj, setCnpj] = useState('');
+  const [contato, setContato] = useState('');
+  const [endereco, setEndereco] = useState('');
   const [open, setOpen] = useState(true);
-  const [fornecedor, setFornecedor] = useState<Fornecedor>({
-    id: Date.now(),
-    nome: '',
-    contato: '',
-    endereco: ''
-  });
+  const navigate = useNavigate();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFornecedor({ ...fornecedor, [name]: value });
-  };
+  const { mutate } = useFornecedorMutatePost();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Fornecedor cadastrado:', fornecedor);
-    navigate('/fornecedores');
-  };
+  async function handleFornecedorSubmit() {
+    
+    const fornecedor: Fornecedor = {
+      nome: nome,
+      cnpj: cnpj, 
+      contato: contato,
+      endereco: endereco,
+    }
+    console.log(fornecedor);
+    mutate(fornecedor)
+    
+    navigate("/fornecedores")
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -43,14 +41,26 @@ export function CadastroFornecedores() {
               <p className="text-base text-gray-600">Insira as informações do fornecedor para adicioná-lo ao sistema.</p>
             </header>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <form onSubmit={handleFornecedorSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label className="block text-gray-700 font-bold mb-2">Nome</label>
                 <input
                   type="text"
                   name="nome"
-                  value={fornecedor.nome}
-                  onChange={handleInputChange}
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 font-bold mb-2">CNPJ</label>
+                <input
+                  type="text"
+                  name="cnpj"
+                  value={cnpj}
+                  onChange={(e) => setCnpj(e.target.value)}
                   className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
@@ -61,8 +71,8 @@ export function CadastroFornecedores() {
                 <input
                   type="text"
                   name="contato"
-                  value={fornecedor.contato}
-                  onChange={handleInputChange}
+                  value={contato}
+                  onChange={(e) => setContato(e.target.value)}
                   className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
@@ -73,8 +83,8 @@ export function CadastroFornecedores() {
                 <input
                   type="text"
                   name="endereco"
-                  value={fornecedor.endereco}
-                  onChange={handleInputChange}
+                  value={endereco}
+                  onChange={(e) => setEndereco(e.target.value)}
                   className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />

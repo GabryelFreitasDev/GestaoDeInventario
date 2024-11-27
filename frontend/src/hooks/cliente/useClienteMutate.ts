@@ -1,12 +1,17 @@
 import { Cliente } from "@/interfaces/Cliente";
 import { api } from "@/services/apiClient";
+import { getToken } from "@/utils/getToken";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
-
-
 const postCliente = async (data: Cliente): Promise<AxiosResponse<Cliente>> => {
-    const response = api.post('/Cliente', data);
+    const token = getToken()
+    const response = await api.post('/Cliente', data, {
+        headers:{
+            Authorization: `Bearer ${token}`
+        }} 
+    );
+
     return response;
 };
 
@@ -21,7 +26,7 @@ const putCliente = async (data: Cliente): Promise<AxiosResponse<Cliente>> => {
 };
 
 
-export function useClienteClienteMutatePost() {
+export function useClienteMutatePost() {
     const queryClient = useQueryClient();
     const mutatePost = useMutation({
         mutationFn: postCliente,

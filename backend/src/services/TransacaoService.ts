@@ -33,6 +33,14 @@ class TransacaoService {
         return Transacao;
     }
 
+    async getAll() {
+        const transacao = await prismaClient.transacao.findMany({
+            select: selectTransacao
+        });
+
+        return transacao;
+    }
+
     async post(Transacao: TransacaoDTO) { 
         const TransacaoSalvo = await prismaClient.transacao.create(
             {

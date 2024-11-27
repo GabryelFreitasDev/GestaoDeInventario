@@ -31,6 +31,14 @@ class ItemPedidoService {
         return itemPedido;
     }
 
+    async getAll() {
+        const itempedido = await prismaClient.itemPedido.findMany({
+            select: selectItemPedido
+        });
+
+        return itempedido;
+    }
+
     async post(itemPedido: ItemPedidoDTO) { 
         const itemPedidoSalvo = await prismaClient.itemPedido.create(
             {

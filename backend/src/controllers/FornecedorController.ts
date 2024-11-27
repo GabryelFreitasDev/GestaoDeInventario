@@ -5,10 +5,14 @@ import { FornecedorService } from "../services/FornecedorService";
 class FornecedorController {
     async get(req: Request, res: Response){
         const idfornecedor = req.query.id;
-        
-        const detailFornecedorService =  new FornecedorService();
 
-        const fornecedor = await detailFornecedorService.get(Number(idfornecedor));
+        const fornecedorService =  new FornecedorService();
+        let fornecedor;
+
+        if(idfornecedor !== null && idfornecedor !== undefined)
+            fornecedor = await fornecedorService.get(Number(idfornecedor));
+        else
+            fornecedor = await fornecedorService.getAll();
 
         return res.json(fornecedor);
     }

@@ -7,8 +7,9 @@ interface PayLoad {
 
 export function AutenticarUsuario(req: Request, res: Response, next: NextFunction) {
     const authToken = req.headers.authorization;
-    console.log(req.headers)
-    console.log(authToken)
+
+    console.log(authToken);
+    
     if (!authToken) {
         return res.status(401).end();
     }

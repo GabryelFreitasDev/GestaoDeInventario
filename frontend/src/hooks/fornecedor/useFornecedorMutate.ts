@@ -1,12 +1,17 @@
 import { Fornecedor } from "@/interfaces/Fornecedor";
 import { api } from "@/services/apiClient";
+import { getToken } from "@/utils/getToken";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
-
-
 const postFornecedor = async (data: Fornecedor): Promise<AxiosResponse<Fornecedor>> => {
-    const response = api.post('/Fornecedor', data);
+    const token = getToken()
+    const response = await api.post('/Fornecedor', data, {
+        headers:{
+            Authorization: `Bearer ${token}`
+        }} 
+    );
+
     return response;
 };
 
@@ -21,7 +26,7 @@ const putFornecedor = async (data: Fornecedor): Promise<AxiosResponse<Fornecedor
 };
 
 
-export function useFornecedorFornecedorMutatePost() {
+export function useFornecedorMutatePost() {
     const queryClient = useQueryClient();
     const mutatePost = useMutation({
         mutationFn: postFornecedor,
@@ -34,7 +39,7 @@ export function useFornecedorFornecedorMutatePost() {
     return mutatePost;
 }
 
-export function useFornecedorFornecedorMutateDelete() {
+export function useFornecedorMutateDelete() {
     const queryClient = useQueryClient();
     const mutateDelete = useMutation({
         mutationFn: deleteFornecedor,

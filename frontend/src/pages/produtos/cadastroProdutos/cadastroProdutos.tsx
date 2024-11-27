@@ -51,7 +51,7 @@ export function CadastroProdutos() {
     }
     console.log(produto);
     mutate(produto)
-
+    
     navigate("/produtos")
   }
 

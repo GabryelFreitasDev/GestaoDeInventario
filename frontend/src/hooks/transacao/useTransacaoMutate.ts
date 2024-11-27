@@ -1,12 +1,17 @@
 import { Transacao } from "@/interfaces/Transacao";
 import { api } from "@/services/apiClient";
+import { getToken } from "@/utils/getToken";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
-
-
 const postTransacao = async (data: Transacao): Promise<AxiosResponse<Transacao>> => {
-    const response = api.post('/Transacao', data);
+    const token = getToken()
+    const response = await api.post('/Transacao', data, {
+        headers:{
+            Authorization: `Bearer ${token}`
+        }} 
+    );
+
     return response;
 };
 

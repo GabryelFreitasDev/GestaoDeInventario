@@ -29,6 +29,7 @@ class UsuarioService {
     }
 
     async post(usuario: UsuarioDTO) { 
+        console.log(usuario);
         await validaExistenciaUsuario(usuario);
         const senhaHash = await hash(usuario.senha, 8);
         const usuarioSalvo = await prismaClient.usuario.create(
@@ -48,7 +49,7 @@ class UsuarioService {
         const usuarioSalvo = await prismaClient.usuario.update(
             {
                 data: {
-                    nome: usuario.senha,
+                    nome: usuario.nome,
                     email: usuario.email,
                     senha: senhaHash
                 },

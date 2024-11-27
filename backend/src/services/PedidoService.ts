@@ -31,6 +31,14 @@ class PedidoService {
         return Pedido;
     }
 
+    async getAll() {
+        const pedido = await prismaClient.cliente.findMany({
+            select: selectPedido
+        });
+
+        return pedido;
+    }
+
     async post(Pedido: PedidoDTO) { 
         const PedidoSalvo = await prismaClient.pedido.create(
             {
