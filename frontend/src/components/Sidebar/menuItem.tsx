@@ -3,6 +3,8 @@ import HomeIcon from "@/assets/home.png";
 import ShoppingIcon from "@/assets/shopping.png";
 import UserGroupIcon from "@/assets/usergroup.png";
 import CubeIcon from "@/assets/cube.png";
+import ItensIcon from "@/assets/itens.png"
+import TransacaoIcon from "@/assets/transacoes.png"
 import PedidosIcon from "@/assets/pedidos.png";
 import VectorIcon from "@/assets/vector.png";
 import ConfigIcon from "@/assets/config.png";
@@ -23,6 +25,8 @@ const iconsMap: Record<string, string> = {
   usergroup: UserGroupIcon,
   cube: CubeIcon,
   pedidos: PedidosIcon,
+  itens: ItensIcon,
+  transacoes: TransacaoIcon,
   vector: VectorIcon,
   config: ConfigIcon,
   exit: ExitIcon,

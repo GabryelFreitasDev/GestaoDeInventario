@@ -11,6 +11,8 @@ const Sidebar: React.FC<{ open: boolean; setOpen: React.Dispatch<React.SetStateA
     { title: "Clientes", src: "usergroup", path: "/clientes" },
     { title: "Fornecedores", src: "cube", path: "/fornecedores" },
     { title: "Pedidos", src: "pedidos", path: "/pedidos" },
+    { title: "Itens", src: "itens", path: "/itens" },
+    { title: "Transações", src: "transacoes", path: "/transacoes" },
     { title: "Relatórios", src: "vector", path: "/relatorios" },
     { title: "Configurações", src: "config", path: "/configuracoes", gap: true },
     { title: "Sair", src: "exit", path: "/" },
