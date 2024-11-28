@@ -1,18 +1,11 @@
 import Sidebar from '@/components/Sidebar/sidebar'
+import { useItemPedido } from '@/hooks/itempedido/useItemPedido';
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ItemPedido } from '@/interfaces/ItemPedido'
-
-// Dados de exemplo
-const itensExemplo: ItemPedido[] = [
-  { id: 1, pedidoId: 1, produtoId: 1, quantidade: 2, precoUnitario: 50.00 },
-  { id: 2, pedidoId: 1, produtoId: 2, quantidade: 1, precoUnitario: 100.00 },
-  { id: 3, pedidoId: 2, produtoId: 3, quantidade: 3, precoUnitario: 25.00 }
-]
 
 export function ListagemItens() {
-  const [itens] = useState<ItemPedido[]>(itensExemplo)
-  const [itemSelecionado, setItemSelecionado] = useState<number | null>(null)
+  const { data } = useItemPedido();
+  const [itemPedidoSelecionado, setItemPedidoSelecionado] = useState<number | null>(null)
   const [open, setOpen] = useState(true);
 
   return (
@@ -27,7 +20,7 @@ export function ListagemItens() {
                 Listagem de Itens
               </h1>
               <p className="font-sans font-normal text-base text-gray-600">
-                Gerencie os itens dos pedidos cadastrados no sistema.
+                Gerencie os itens dos itempedidos cadastrados no sistema.
               </p>
             </header>
 
@@ -40,7 +33,7 @@ export function ListagemItens() {
               </Link>
               <button
                 onClick={() => {/* Implementar edição */}}
-                disabled={!itemSelecionado}
+                disabled={!itemPedidoSelecionado}
                 className="bg-blue-500 text-white font-bold py-2 px-4 rounded outline-none hover:bg-blue-400 hover:ring-1 hover:ring-blue-500 focus:ring-2 focus:ring-blue-400 disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 Editar Item
@@ -56,7 +49,7 @@ export function ListagemItens() {
             <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow">
               <thead>
                 <tr>
-                  <th className="py-2 px-4 border-b bg-gray-100 text-left">ID do Pedido</th>
+                  <th className="py-2 px-4 border-b bg-gray-100 text-left">ID do ItemPedido</th>
                   <th className="py-2 px-4 border-b bg-gray-100 text-left">ID do Produto</th>
                   <th className="py-2 px-4 border-b bg-gray-100 text-left">Quantidade</th>
                   <th className="py-2 px-4 border-b bg-gray-100 text-left">Preço Unitário</th>
@@ -64,17 +57,17 @@ export function ListagemItens() {
                 </tr>
               </thead>
               <tbody>
-                {itens.map((item) => (
+                {data?.map((item) => (
                   <tr
                     key={item.id}
-                    onClick={() => setItemSelecionado(item.id ?? null)}
-                    className={`cursor-pointer hover:bg-gray-100 ${itemSelecionado === item.id ? 'bg-purple-100' : ''}`}
+                    onClick={() => setItemPedidoSelecionado(item.id ?? null)}
+                    className={`cursor-pointer hover:bg-gray-100 ${itemPedidoSelecionado === item.id ? 'bg-purple-100' : ''}`}
                   >
-                    <td className="py-2 px-4 border-b">{item.pedidoId}</td>
+                    <td className="py-2 px-4 border-b">{item.id}</td>
                     <td className="py-2 px-4 border-b">{item.produtoId}</td>
                     <td className="py-2 px-4 border-b">{item.quantidade}</td>
-                    <td className="py-2 px-4 border-b">R$ {item.precoUnitario.toFixed(2)}</td>
-                    <td className="py-2 px-4 border-b">R$ {(item.quantidade * item.precoUnitario).toFixed(2)}</td>
+                    <td className="py-2 px-4 border-b">R$ {item.precoUnitario}</td>
+                    <td className="py-2 px-4 border-b">R$ {(item.quantidade * item.precoUnitario)}</td>
                   </tr>
                 ))}
               </tbody>

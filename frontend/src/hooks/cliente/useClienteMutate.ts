@@ -39,7 +39,7 @@ export function useClienteMutatePost() {
     return mutatePost;
 }
 
-export function useClienteClienteMutateDelete() {
+export function useClienteMutateDelete() {
     const queryClient = useQueryClient();
     const mutateDelete = useMutation({
         mutationFn: deleteCliente,
@@ -52,7 +52,7 @@ export function useClienteClienteMutateDelete() {
     return mutateDelete;
 }
 
-export function useClienteClienteMutatePut() {
+export function useClienteMutatePut() {
     const queryClient = useQueryClient();
     const mutatePut = useMutation({
         mutationFn: putCliente,

@@ -1,57 +1,48 @@
 import Sidebar from '@/components/Sidebar/sidebar';
+import { usePedido } from '@/hooks/pedido/usePedido';
+import { useProduto } from '@/hooks/produto/useProduto';
+import { useTransacaoMutatePost } from '@/hooks/transacao/useTransacaoMutate';
+import { Pedido } from '@/interfaces/Pedido';
+import { Produto } from '@/interfaces/Produto';
+import { Transacao } from '@/interfaces/Transacao';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-// Tipo para representar uma transação
-type Transacao = {
-  id: number;
-  pedidoId: number;
-  tipo: 'entrada' | 'saida';
-  quantidade: number;
-  data: string;
-  observacao: string;
-};
-
-// Tipo para representar um pedido
-type Pedido = {
-  id: number;
-  clienteNome: string;
-  dataPedido: string;
-};
-
 export function CadastroTransacoes() {
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(true);
-  const [transacao, setTransacao] = useState<Transacao>({
-    id: Date.now(),
-    pedidoId: 0,
-    tipo: 'entrada',
-    quantidade: 0,
-    data: new Date().toISOString().split('T')[0],
-    observacao: ''
-  });
+  const { data: pedidosList } = usePedido();
+  const { data: produtosList } = useProduto();
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
+  const [produtos, setProdutos] = useState<Produto[]>([]);
+  const [pedidoId, setPedidoId] = useState<number | undefined>(undefined);
+  const [produtoId, setProdutoId] = useState<number | undefined>(undefined);
+  const [dataTransacao, setDataTransacao] = useState<string>(
+    new Date().toISOString().substring(0, 10)
+  );
+  const [tipo, setTipo] = useState('entrada');
+  const [valor, setValor] = useState<number>(0);
+  const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
+  const { mutate } = useTransacaoMutatePost();
 
   useEffect(() => {
-    // Aqui você deve fazer uma chamada à API para buscar a lista de pedidos
-    // Por enquanto, vamos usar dados de exemplo
-    setPedidos([
-      { id: 1, clienteNome: 'Cliente 1', dataPedido: '2024-01-15' },
-      { id: 2, clienteNome: 'Cliente 2', dataPedido: '2024-01-16' },
-      { id: 3, clienteNome: 'Cliente 3', dataPedido: '2024-01-17' },
-    ]);
-  }, []);
+    if (pedidosList) setPedidos(pedidosList);
+    if (produtosList) setProdutos(produtosList);
+  }, [pedidosList, produtosList]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setTransacao({ ...transacao, [name]: value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Transação registrada:', transacao);
-    navigate('/transacoes');
-  };
+  async function handleTransacaoSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    const transacao: Transacao = {
+      data: new Date(dataTransacao),
+      tipo: tipo,
+      valor: valor,
+      produtoId: produtoId!,
+      pedidoId: pedidoId!,
+    };
+    console.log(transacao);
+    mutate(transacao, {
+      onSuccess: () => navigate('/transacoes'),
+    });
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -62,35 +53,69 @@ export function CadastroTransacoes() {
           <main className="flex flex-col gap-6">
             <header className="flex flex-col gap-4">
               <h1 className="text-3xl font-bold text-gray-800">Registro de Transação</h1>
-              <p className="text-base text-gray-600">Registre entradas e saídas de estoque baseadas em pedidos.</p>
+              <p className="text-base text-gray-600">
+                Registre entradas e saídas de estoque vinculadas a pedidos e produtos.
+              </p>
             </header>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <form onSubmit={handleTransacaoSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+              {/* Data */}
+              <div>
+                <label className="block text-gray-700 font-bold mb-2">Data</label>
+                <input
+                  type="date"
+                  value={dataTransacao}
+                  onChange={(e) => setDataTransacao(e.target.value)}
+                  className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
+                  required
+                />
+              </div>
+
+              {/* Pedido */}
               <div>
                 <label className="block text-gray-700 font-bold mb-2">Pedido</label>
                 <select
-                  name="pedidoId"
-                  value={transacao.pedidoId}
-                  onChange={handleInputChange}
+                  value={pedidoId}
+                  onChange={(e) => setPedidoId(Number(e.target.value))}
                   className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 >
                   <option value="">Selecione um pedido</option>
                   {pedidos.map((pedido) => (
                     <option key={pedido.id} value={pedido.id}>
-                      {`Pedido ${pedido.id} - ${pedido.clienteNome} (${pedido.dataPedido})`}
+                      {pedido.id}
                     </option>
                   ))}
                 </select>
               </div>
 
+              {/* Produto */}
+              <div>
+                <label className="block text-gray-700 font-bold mb-2">Produto</label>
+                <select
+                  value={produtoId}
+                  onChange={(e) => setProdutoId(Number(e.target.value))}
+                  className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
+                  required
+                >
+                  <option value="">Selecione um produto</option>
+                  {produtos.map((produto) => (
+                    <option key={produto.id} value={produto.id}>
+                      {produto.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Tipo de Transação */}
               <div>
                 <label className="block text-gray-700 font-bold mb-2">Tipo de Transação</label>
                 <select
-                  name="tipo"
-                  value={transacao.tipo}
-                  onChange={handleInputChange}
+                  value={tipo}
+                  onChange={(e) => setTipo(e.target.value)}
                   className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
+                  required
                 >
                   <option value="entrada">Entrada</option>
                   <option value="saida">Saída</option>
@@ -98,41 +123,20 @@ export function CadastroTransacoes() {
               </div>
 
               <div>
-                <label className="block text-gray-700 font-bold mb-2">Quantidade</label>
+                <label className="block text-gray-700 font-bold mb-2">Valor</label>
                 <input
                   type="number"
-                  name="quantidade"
-                  value={transacao.quantidade}
-                  onChange={handleInputChange}
+                  name="precoUnitario" 
+                  value={valor}
+                  onChange={(e) => setValor(Number(e.target.value))}
                   className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
                   required
-                  min="1"
+                  min="0"
+                  step="0.01"
                 />
               </div>
 
-              <div>
-                <label className="block text-gray-700 font-bold mb-2">Data</label>
-                <input
-                  type="date"
-                  name="data"
-                  value={transacao.data}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
-                  required
-                />
-              </div>
-
-              <div className="col-span-1 sm:col-span-2">
-                <label className="block text-gray-700 font-bold mb-2">Observação</label>
-                <textarea
-                  name="observacao"
-                  value={transacao.observacao}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
-                  rows={3}
-                />
-              </div>
-
+              {/* Botões */}
               <div className="col-span-1 sm:col-span-2 flex justify-end gap-4 mt-6">
                 <Link
                   to="/transacoes"
@@ -154,4 +158,3 @@ export function CadastroTransacoes() {
     </div>
   );
 }
-

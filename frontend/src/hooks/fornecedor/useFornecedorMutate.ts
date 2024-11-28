@@ -52,7 +52,7 @@ export function useFornecedorMutateDelete() {
     return mutateDelete;
 }
 
-export function useFornecedorFornecedorMutatePut() {
+export function useFornecedorMutatePut() {
     const queryClient = useQueryClient();
     const mutatePut = useMutation({
         mutationFn: putFornecedor,

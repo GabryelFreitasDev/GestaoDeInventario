@@ -1,28 +1,48 @@
 import Sidebar from '@/components/Sidebar/sidebar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ItemPedido } from '@/interfaces/ItemPedido';
+import { useProduto } from '@/hooks/produto/useProduto';
+import { usePedido } from '@/hooks/pedido/usePedido';
+import { Produto } from '@/interfaces/Produto';
+import { Pedido } from '@/interfaces/Pedido';
+import { useItemPedidoMutatePost } from '@/hooks/itempedido/useItemPedidoMutate';
 
 export function CadastroItens() {
-  const navigate = useNavigate();
+  const { data: pedidosList } = usePedido(); 
+  const { data: produtosList } = useProduto();
+  const [pedidos, setPedidos] = useState<Pedido[]>([]);
+  const [produtos, setProdutos] = useState<Produto[]>([]);
+  const [pedidoId, setPedidoId] = useState<number | undefined>(undefined); 
+  const [produtoId, setProdutoId] = useState<number | undefined>(undefined); 
+  const [quantidade, setQuantidade] = useState(1);
+  const [precoUnitario, setPrecoUnitario] = useState(0);
   const [open, setOpen] = useState(true);
-  const [itemPedido, setItemPedido] = useState<ItemPedido>({
-    pedidoId: 0,
-    produtoId: 0,
-    quantidade: 0,
-    precoUnitario: 0
-  });
+  const navigate = useNavigate();
+  const { mutate } = useItemPedidoMutatePost();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setItemPedido({ ...itemPedido, [name]: name === 'quantidade' || name === 'precoUnitario' ? Number(value) : value });
-  };
+  useEffect(() => {
+    if (pedidosList) {
+      setPedidos(pedidosList);
+    }
+    if(produtosList){
+      setProdutos(produtosList);
+    }
+  }, [pedidosList, produtosList]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Item de pedido cadastrado:', itemPedido);
-    navigate('/pedidos');
-  };
+  async function handlePedidoSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    const itemPedido: ItemPedido = {
+      pedidoId: pedidoId!,
+      produtoId: produtoId!, 
+      quantidade: quantidade,
+      precoUnitario: precoUnitario,
+    };
+    console.log(itemPedido);
+    mutate(itemPedido, {
+      onSuccess: () => navigate('/itens'), 
+    });
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -36,18 +56,22 @@ export function CadastroItens() {
               <p className="text-base text-gray-600">Associe produtos ao pedido informando as quantidades e preços.</p>
             </header>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <form onSubmit={handlePedidoSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label className="block text-gray-700 font-bold mb-2">Pedido</label>
                 <select
                   name="pedidoId"
-                  value={itemPedido.pedidoId}
-                  onChange={handleInputChange}
+                  value={pedidoId}
+                  onChange={(e) => setPedidoId(Number(e.target.value))}
                   className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 >
                   <option value="">Selecione um pedido</option>
-                  {/* Opções de pedidos serão adicionadas aqui */}
+                  {pedidos.map((pedido) => (
+                    <option key={pedido.id} value={pedido.id}>
+                      {pedido.id}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -55,13 +79,17 @@ export function CadastroItens() {
                 <label className="block text-gray-700 font-bold mb-2">Produto</label>
                 <select
                   name="produtoId"
-                  value={itemPedido.produtoId}
-                  onChange={handleInputChange}
+                  value={produtoId}
+                  onChange={(e) => setProdutoId(Number(e.target.value))}
                   className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 >
                   <option value="">Selecione um produto</option>
-                  {/* Opções de produtos serão adicionadas aqui */}
+                  {produtos.map((produto) => (
+                    <option key={produto.id} value={produto.id}>
+                      {produto.descricao}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -70,8 +98,8 @@ export function CadastroItens() {
                 <input
                   type="number"
                   name="quantidade"
-                  value={itemPedido.quantidade}
-                  onChange={handleInputChange}
+                  value={quantidade}
+                  onChange={(e) => setQuantidade(Number(e.target.value))}
                   className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
                   required
                   min="1"
@@ -83,8 +111,8 @@ export function CadastroItens() {
                 <input
                   type="number"
                   name="precoUnitario" 
-                  value={itemPedido.precoUnitario}
-                  onChange={handleInputChange}
+                  value={precoUnitario}
+                  onChange={(e) => setPrecoUnitario(Number(e.target.value))}
                   className="w-full border border-gray-300 p-3 rounded outline-none focus:ring-2 focus:ring-purple-500"
                   required
                   min="0"

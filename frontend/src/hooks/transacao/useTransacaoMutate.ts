@@ -26,7 +26,7 @@ const putTransacao = async (data: Transacao): Promise<AxiosResponse<Transacao>> 
 };
 
 
-export function useTransacaoTransacaoMutatePost() {
+export function useTransacaoMutatePost() {
     const queryClient = useQueryClient();
     const mutatePost = useMutation({
         mutationFn: postTransacao,
@@ -39,7 +39,7 @@ export function useTransacaoTransacaoMutatePost() {
     return mutatePost;
 }
 
-export function useTransacaoTransacaoMutateDelete() {
+export function useTransacaoMutateDelete() {
     const queryClient = useQueryClient();
     const mutateDelete = useMutation({
         mutationFn: deleteTransacao,
@@ -52,7 +52,7 @@ export function useTransacaoTransacaoMutateDelete() {
     return mutateDelete;
 }
 
-export function useTransacaoTransacaoMutatePut() {
+export function useTransacaoMutatePut() {
     const queryClient = useQueryClient();
     const mutatePut = useMutation({
         mutationFn: putTransacao,

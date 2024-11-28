@@ -27,7 +27,7 @@ const putItemPedido = async (data: ItemPedido): Promise<AxiosResponse<ItemPedido
 };
 
 
-export function useItemPedidoItemPedidoMutatePost() {
+export function useItemPedidoMutatePost() {
     const queryClient = useQueryClient();
     const mutatePost = useMutation({
         mutationFn: postItemPedido,
@@ -40,7 +40,7 @@ export function useItemPedidoItemPedidoMutatePost() {
     return mutatePost;
 }
 
-export function useItemPedidoItemPedidoMutateDelete() {
+export function useItemPedidoMutateDelete() {
     const queryClient = useQueryClient();
     const mutateDelete = useMutation({
         mutationFn: deleteItemPedido,
@@ -53,7 +53,7 @@ export function useItemPedidoItemPedidoMutateDelete() {
     return mutateDelete;
 }
 
-export function useItemPedidoItemPedidoMutatePut() {
+export function useItemPedidoMutatePut() {
     const queryClient = useQueryClient();
     const mutatePut = useMutation({
         mutationFn: putItemPedido,

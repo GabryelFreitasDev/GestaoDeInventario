@@ -21,7 +21,7 @@ const putUsuario = async (data: Usuario): Promise<AxiosResponse<Usuario>> => {
 };
 
 
-export function useUsuarioUsuarioMutatePost() {
+export function useUsuarioMutatePost() {
     const queryClient = useQueryClient();
     const mutatePost = useMutation({
         mutationFn: postUsuario,
@@ -34,7 +34,7 @@ export function useUsuarioUsuarioMutatePost() {
     return mutatePost;
 }
 
-export function useUsuarioUsuarioMutateDelete() {
+export function useUsuarioMutateDelete() {
     const queryClient = useQueryClient();
     const mutateDelete = useMutation({
         mutationFn: deleteUsuario,
@@ -47,7 +47,7 @@ export function useUsuarioUsuarioMutateDelete() {
     return mutateDelete;
 }
 
-export function useUsuarioUsuarioMutatePut() {
+export function useUsuarioMutatePut() {
     const queryClient = useQueryClient();
     const mutatePut = useMutation({
         mutationFn: putUsuario,

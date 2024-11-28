@@ -32,7 +32,7 @@ class PedidoService {
     }
 
     async getAll() {
-        const pedido = await prismaClient.cliente.findMany({
+        const pedido = await prismaClient.pedido.findMany({
             select: selectPedido
         });
 

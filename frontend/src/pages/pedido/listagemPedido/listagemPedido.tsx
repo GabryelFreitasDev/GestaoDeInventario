@@ -1,25 +1,11 @@
 import Sidebar from '@/components/Sidebar/sidebar'
+import { usePedido } from '@/hooks/pedido/usePedido';
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-// Tipo para representar um pedido
-type Pedido = {
-  id: number;
-  clienteId: number;
-  dataPedido: string;
-  status: 'pendente' | 'aprovado' | 'cancelado';
-  valorTotal: number;
-};
-
-// Dados de exemplo
-const pedidosExemplo: Pedido[] = [
-  { id: 1, clienteId: 1, dataPedido: '2024-01-15', status: 'pendente', valorTotal: 1500.00 },
-  { id: 2, clienteId: 2, dataPedido: '2024-01-16', status: 'aprovado', valorTotal: 2300.50 },
-  { id: 3, clienteId: 1, dataPedido: '2024-01-17', status: 'cancelado', valorTotal: 800.00 },
-]
 
 export function ListagemPedidos() {
-  const [pedidos] = useState<Pedido[]>(pedidosExemplo)
+  const { data } = usePedido();
   const [pedidoSelecionado, setPedidoSelecionado] = useState<number | null>(null)
   const [open, setOpen] = useState(true);
 
@@ -72,17 +58,17 @@ export function ListagemPedidos() {
                 </tr>
               </thead>
               <tbody>
-                {pedidos.map((pedido) => (
+                {data?.map((pedido) => (
                   <tr
                     key={pedido.id}
-                    onClick={() => setPedidoSelecionado(pedido.id)}
+                    onClick={() => setPedidoSelecionado(pedido.id ?? -1)}
                     className={`cursor-pointer hover:bg-gray-100 ${pedidoSelecionado === pedido.id ? 'bg-purple-100' : ''}`}
                   >
                     <td className="py-2 px-4 border-b">{pedido.id}</td>
                     <td className="py-2 px-4 border-b">{pedido.clienteId}</td>
-                    <td className="py-2 px-4 border-b">{pedido.dataPedido}</td>
+                    <td className="py-2 px-4 border-b">{new Date(pedido.data).toLocaleDateString('pt-BR')}</td>
                     <td className="py-2 px-4 border-b">{pedido.status}</td>
-                    <td className="py-2 px-4 border-b">R$ {pedido.valorTotal.toFixed(2)}</td>
+                    <td className="py-2 px-4 border-b">R$ {pedido.total}</td>
                   </tr>
                 ))}
               </tbody>

@@ -1,26 +1,11 @@
 import Sidebar from '@/components/Sidebar/sidebar'
+import { useTransacao } from '@/hooks/transacao/useTransacao';
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-// Tipo para representar uma transação
-type Transacao = {
-  id: number;
-  pedidoId: number;
-  tipo: 'entrada' | 'saida';
-  quantidade: number;
-  data: string;
-  observacao: string;
-};
-
-// Dados de exemplo
-const transacoesExemplo: Transacao[] = [
-  { id: 1, pedidoId: 1, tipo: 'entrada', quantidade: 10, data: '2024-01-15', observacao: 'Entrada inicial' },
-  { id: 2, pedidoId: 2, tipo: 'saida', quantidade: 5, data: '2024-01-16', observacao: 'Saída para cliente' },
-  { id: 3, pedidoId: 1, tipo: 'entrada', quantidade: 8, data: '2024-01-17', observacao: 'Reposição de estoque' },
-]
 
 export function ListagemTransacoes() {
-  const [transacoes] = useState<Transacao[]>(transacoesExemplo)
+  const { data } = useTransacao();
   const [transacaoSelecionada, setTransacaoSelecionada] = useState<number | null>(null)
   const [open, setOpen] = useState(true);
 
@@ -65,25 +50,25 @@ export function ListagemTransacoes() {
             <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow">
               <thead>
                 <tr>
-                  <th className="py-2 px-4 border-b bg-gray-100 text-left">ID do Pedido</th>
-                  <th className="py-2 px-4 border-b bg-gray-100 text-left">Tipo</th>
-                  <th className="py-2 px-4 border-b bg-gray-100 text-left">Quantidade</th>
                   <th className="py-2 px-4 border-b bg-gray-100 text-left">Data</th>
-                  <th className="py-2 px-4 border-b bg-gray-100 text-left">Observação</th>
+                  <th className="py-2 px-4 border-b bg-gray-100 text-left">ID do Pedido</th>
+                  <th className="py-2 px-4 border-b bg-gray-100 text-left">ID do Produto</th>
+                  <th className="py-2 px-4 border-b bg-gray-100 text-left">Tipo</th>
+                  <th className="py-2 px-4 border-b bg-gray-100 text-left">Valor</th>
                 </tr>
               </thead>
               <tbody>
-                {transacoes.map((transacao) => (
+                {data?.map((transacao) => (
                   <tr
                     key={transacao.id}
-                    onClick={() => setTransacaoSelecionada(transacao.id)}
+                    onClick={() => setTransacaoSelecionada(transacao.id ?? -1)}
                     className={`cursor-pointer hover:bg-gray-100 ${transacaoSelecionada === transacao.id ? 'bg-purple-100' : ''}`}
                   >
+                    <td className="py-2 px-4 border-b">{new Date(transacao.data).toLocaleDateString('pt-BR')}</td>
                     <td className="py-2 px-4 border-b">{transacao.pedidoId}</td>
-                    <td className="py-2 px-4 border-b">{transacao.tipo === 'entrada' ? 'Entrada' : 'Saída'}</td>
-                    <td className="py-2 px-4 border-b">{transacao.quantidade}</td>
-                    <td className="py-2 px-4 border-b">{transacao.data}</td>
-                    <td className="py-2 px-4 border-b">{transacao.observacao}</td>
+                    <td className="py-2 px-4 border-b">{transacao.produtoId}</td>
+                    <td className="py-2 px-4 border-b">{transacao.tipo}</td>
+                    <td className="py-2 px-4 border-b">{transacao.valor}</td>
                   </tr>
                 ))}
               </tbody>

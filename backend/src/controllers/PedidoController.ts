@@ -38,6 +38,7 @@ class PedidoController {
     }
 
     async delete(req: Request, res: Response) {
+        console.log(req.query);
         const idpedido = req.query.id;
 
         const createPedidoService = new PedidoService();
