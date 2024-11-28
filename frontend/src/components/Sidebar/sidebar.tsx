@@ -31,7 +31,7 @@ const Sidebar: React.FC<{ open: boolean; setOpen: React.Dispatch<React.SetStateA
           className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"}`}
         />
         <h1 className={`text-white origin-left font-medium text-xl duration-200 ${!open && "scale-0"}`}>
-          NOME
+          UserFlow
         </h1>
       </div>
       <ul className="pt-6">
